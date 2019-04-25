@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cuilihuan.applogs.visualize.dao.StatMapper">
+    <update id="updateProvince">
+    UPDATE ext_startup_logs
+    set province = #{0}
+    WHERE id = #{1};
+    </update>
+
+
+
+    <!-- 查询新增用户 -->
+    <select id="findNewUsers" resultMap="rm_StatBean">
+        select count(*) stcount
+        from ext_startup_logs
+    </select>
+
+    <resultMap id="rm_StatBean" type="com.cuilihuan.applogs.visualize.domain.StatBean">
+        <result column="stcount" property="count"/>
+    </resultMap>
+
+    <select id="findThisWeekNewUsers" resultMap="rm_weekUser">
+
+        SELECT date_format(t.mintime, "%Y/%m/%d") stdate,
+               appVersion,
+               count(*)                           stcount
+        FROM (
+                 SELECT deviceid,
+                        FROM_UNIXTIME(
+                                min(createdatms) / 1000,
+                                "%Y/%m/%d %H:%i:%S"
+                            ) mintime,
+                        appVersion
+                 FROM ext_startup_logs
+                 WHERE appid = #{sdk34734}
+                 GROUP BY deviceid,
+                          appVersion
+                 HAVING mintime >= date_format(DATE_SUB(now(), INTERVAL 7 DAY), "%Y/%m/%d 00:00:00")
+                    AND mintime &lt;= date_format(DATE_ADD(now(), INTERVAL 1 DAY), "%Y/%m/%d 00:00:00")
+             ) t
+        GROUP BY stdate, appVersion
+    </select>
+
+    <select id="selectThisWeekActive" resultMap="rm_activeUser">
+        select COUNT(DISTINCT deviceId) count, createtime
+        from (
+                 SELECT deviceId, FROM_UNIXTIME(createdatms / 1000, "%Y/%m/%d") createtime
+                 from ext_startup_logs
+                 where appId = #{appId}
+             ) t
+        GROUP BY createtime
+        HAVING createtime >= date_format(
+                DATE_SUB(now(), INTERVAL 7 DAY),
+                "%Y/%m/%d 00:00:00"
+            )
+           AND createtime &lt;= date_format(
+                DATE_ADD(now(), INTERVAL 1 DAY),
+                "%Y/%m/%d 00:00:00")
+        ORDER BY createtime desc
+    </select>
+
+    <select id="selectSilenceUser" resultMap="rm_silenceUser">
+
+        SELECT count(*) countNum,
+               appVersion
+        FROM (
+                 SELECT appVersion,
+                        deviceid,
+                        count(createdatms) dcount,
+                        FROM_UNIXTIME(
+                                min(createdatms) / 1000,
+                                "%Y/%m/%d %H:%i:%S"
+                            )              dmin
+                 FROM ext_startup_logs
+                 WHERE appid = #{appId}
+                 GROUP BY deviceid, appVersion
+                 HAVING dcount = 1
+                    AND dmin &lt; date_format(
+                         DATE_SUB(now(), INTERVAL 1 DAY),
+                         "%Y/%m/%d 00:00:00"
+                     )
+             ) t
+        GROUP BY appVersion;
+    </select>
+    <select id="selectStartUpNum" resultMap="rm_weekUser">
+        SELECT count(deviceid) stcount,
+               stdate,
+               appVersion
+        FROM (
+                 SELECT deviceid,
+                        FROM_UNIXTIME(
+                                createdAtMs / 1000,
+                                "%Y/%m/%d"
+                            ) stdate,
+                        appVersion
+                 FROM ext_startup_logs
+                 WHERE appid = #{appId}
+                 GROUP BY deviceid,
+                          stdate,
+                          appVersion
+             ) t
+        GROUP BY stdate,
+                 appVersion
+        ORDER BY stdate
+    </select>
+    <select id="selectProvinceNum" resultMap="rm_provincenum">
+        SELECT count(*) count,province
+        FROM ext_startup_logs
+        GROUP BY province
+        order by count desc
+    </select>
+
+    <resultMap id="rm_provincenum" type="com.cuilihuan.applogs.visualize.domain.InfoPorovinceAndNumBean">
+        <result column="count" property="count"/>
+        <result column="province" property="province"/>
+    </resultMap>
+
+    <resultMap id="rm_silenceUser" type="com.cuilihuan.applogs.visualize.domain.StatBean">
+        <result column="countNum" property="count"/>
+        <result column="appVersion" property="appVersion"/>
+    </resultMap>
+
+
+    <resultMap id="rm_activeUser" type="com.cuilihuan.applogs.visualize.domain.StatBean">
+        <result column="count" property="count"/>
+        <result column="createtime" property="date"/>
+    </resultMap>
+
+
+    <resultMap id="rm_weekUser" type="com.cuilihuan.applogs.visualize.domain.StatBean">
+        <result column="stcount" property="count"/>
+        <result column="stdate" property="date"/>
+        <result column="appVersion" property="appVersion"/>
+    </resultMap>
+
+
+</mapper>

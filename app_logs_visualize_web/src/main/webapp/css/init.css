@@ -1,0 +1,154 @@
+.test {
+    background-color: #3DA1A7;
+}
+
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+#div-top {
+    height: 30px;
+    width: 100%;
+    background-color: #3b485b;
+    border: 0px solid #3b485b;
+}
+
+#div-top ul {
+    margin: 0px;
+}
+
+#div-top ul li {
+    list-style: none;
+    display: block;
+    float: left;
+    color: white;
+    border: 0px solid white;
+    line-height: 30px;
+    width: 70px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+#div-top ul li:first-child {
+    list-style: none;
+    display: block;
+    float: left;
+    color: white;
+    border: 0px solid white;
+    line-height: 30px;
+    width: 130px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+#div-top ul li a {
+    text-decoration: none;
+    font-size: smaller;
+    color: #9da4ad;
+}
+
+#div-top ul li:first-child a {
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+#div-banner {
+    height: 60px;
+    width: 100%;
+    border: 10px solid white;
+    text-align: left;
+}
+
+#div-banner form {
+    border: 0px solid blue;
+    width: 200px;
+    height: 57px;
+    vertical-align: middle;
+    line-height: 57px;
+    text-align: center;
+}
+
+#div-banner select {
+    border-radius: 20px;
+    font-size: 15px;
+    display: inline;
+    padding: 3px 10px;
+}
+
+#div-banner ul {
+    border: 0px solid blue;
+    list-style: none;
+    display: block;
+    position: absolute;
+    left: 200px;
+    top: 14px;
+    height: 57px;
+    width: 600px;
+    vertical-align: middle;
+    line-height: 57px;
+    margin-left: 380px;
+}
+
+#div-banner ul li {
+    display: inline;
+    padding: 0px 20px;
+}
+
+#div-banner ul li a {
+    text-decoration: none;
+    font-size: 16px;
+    color: #333333;
+}
+
+#accordion {
+    margin: -8px 20px;
+    width: 200px;
+}
+
+#accordion a {
+    display: block;
+    height: 45px;
+    width: 200px;
+    text-decoration: none;
+    text-align: center;
+    line-height: 45px;
+    font-size: 14px;
+    border-radius: 2px;
+    margin: 1px 0px 0px -40px;
+    border: 1px solid #AAAAAA;
+    border-width: 0px 0px 1px 0px;
+}
+
+/*第一个a子元素*/
+#accordion a:first-child {
+    margin-top: -20px;
+}
+
+#div-stat-header {
+    border: 1px solid #B4B4B4;
+    position: absolute;
+    left: 250px;
+    top: 100px;
+    width: 1050px;
+    height: 50px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: rgb(230, 230, 230);
+    vertical-align: middle;
+    line-height: 50px;
+    padding-left: 20px;
+}
+
+#div-chart {
+    border: 1px solid #B4B4B4;
+    position: absolute;
+    left: 250px;
+    top: 151px;
+    width: 1050px;
+    height: 440px;
+    vertical-align: middle;
+    line-height: 50px;
+    padding-left: 20px;
+}

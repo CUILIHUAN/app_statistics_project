@@ -1,0 +1,86 @@
+{
+  "appErrorLogs": [
+    {
+      "appChannel": "youmeng1",
+      "appId": "sdk34734",
+      "appPlatform": "android",
+      "appVersion": "3.2.1",
+      "createdAtMs": 1555255027412,
+      "deviceId": "device2256",
+      "deviceStyle": "iPhone 6",
+      "errorBrief": "at cn.lift.dfdf.web.AbstractBaseController.validInbound(AbstractBaseController.java:72)",
+      "errorDetail": "java.lang.NullPointerException\\n    at cn.lift.appIn.web.AbstractBaseController.validInbound(AbstractBaseController.java:72)\\n at cn.lift.dfdf.web.AbstractBaseController.validInbound",
+      "osType": "7.1.1",
+      "tenantId": "cake"
+    }
+  ],
+  "appEventLogs": [
+    {
+      "appChannel": "youmeng2",
+      "appId": "sdk34734",
+      "appPlatform": "android",
+      "appVersion": "3.2.2",
+      "createdAtMs": 1555255027411,
+      "deviceId": "device2292",
+      "deviceStyle": "iPhone 6",
+      "eventDurationSecs": 25,
+      "eventId": "popMenu",
+      "osType": "8.3",
+      "paramKeyValueMap": {
+        "testparam3key": "testparam3value",
+        "testparam4key": "testparam4value"
+      },
+      "tenantId": "cake"
+    }
+  ],
+  "appPageLogs": [
+    {
+      "appChannel": "youmeng1",
+      "appId": "sdk34734",
+      "appPlatform": "ios",
+      "appVersion": "3.2.1",
+      "createdAtMs": 1555255027411,
+      "deviceId": "device2237",
+      "deviceStyle": "iPhone 6",
+      "nextPage": "main.html",
+      "osType": "8.3",
+      "pageId": "test.html",
+      "stayDurationSecs": 2,
+      "tenantId": "cake",
+      "visitIndex": 2
+    }
+  ],
+  "appStartupLogs": [
+    {
+      "appChannel": "youmeng2",
+      "appId": "sdk34734",
+      "appPlatform": "ios",
+      "appVersion": "3.2.1",
+      "brand": "魅族",
+      "carrier": "中国电信",
+      "country": "America",
+      "createdAtMs": 1555255027410,
+      "deviceId": "device2222",
+      "deviceStyle": "红米手机1s",
+      "network": "CellNetwork",
+      "osType": "7.1.1",
+      "province": "Washington",
+      "screenSize": "960*640",
+      "tenantId": "cake"
+    }
+  ],
+  "appUsageLogs": [
+    {
+      "appChannel": "youmeng2",
+      "appId": "sdk34734",
+      "appPlatform": "android",
+      "appVersion": "3.2.2",
+      "createdAtMs": 1555255027412,
+      "deviceId": "device2285",
+      "deviceStyle": "红米手机1s",
+      "osType": "8.3",
+      "singleUseDurationSecs": 9,
+      "tenantId": "cake"
+    }
+  ]
+}

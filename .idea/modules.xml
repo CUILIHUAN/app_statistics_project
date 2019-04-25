@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app_log_common/app_log_common.iml" filepath="$PROJECT_DIR$/app_log_common/app_log_common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app_logs_client/app_logs_client.iml" filepath="$PROJECT_DIR$/app_logs_client/app_logs_client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app_logs_collect_web/app_logs_collect_web.iml" filepath="$PROJECT_DIR$/app_logs_collect_web/app_logs_collect_web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app_logs_flume/app_logs_flume.iml" filepath="$PROJECT_DIR$/app_logs_flume/app_logs_flume.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app_logs_hive/app_logs_hive.iml" filepath="$PROJECT_DIR$/app_logs_hive/app_logs_hive.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app_logs_visualize_web/app_logs_visualize_web.iml" filepath="$PROJECT_DIR$/app_logs_visualize_web/app_logs_visualize_web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app_statistics_project.iml" filepath="$PROJECT_DIR$/app_statistics_project.iml" />
+    </modules>
+  </component>
+</project>

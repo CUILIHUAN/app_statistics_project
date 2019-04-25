@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cuilihuan.applogs.visualize.dao.AppEventLogMapper" >
+  <resultMap id="BaseResultMap" type="com.cuilihuan.applogs.visualize.bean.AppEventLog" >
+    <result column="createdAtMs" property="createdAtMs" jdbcType="BIGINT" />
+    <result column="appId" property="appId" jdbcType="VARCHAR" />
+    <result column="tenantId" property="tenantId" jdbcType="VARCHAR" />
+    <result column="deviceId" property="deviceId" jdbcType="VARCHAR" />
+    <result column="appVersion" property="appVersion" jdbcType="VARCHAR" />
+    <result column="appChannel" property="appChannel" jdbcType="VARCHAR" />
+    <result column="appPlatform" property="appPlatform" jdbcType="VARCHAR" />
+    <result column="osType" property="osType" jdbcType="VARCHAR" />
+    <result column="deviceStyle" property="deviceStyle" jdbcType="VARCHAR" />
+    <result column="eventId" property="eventId" jdbcType="VARCHAR" />
+    <result column="eventDurationSecs" property="eventDurationSecs" jdbcType="VARCHAR" />
+    <result column="paramKeyValueMap" property="paramKeyValueMap" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    createdAtMs, appId, tenantId, deviceId, appVersion, appChannel, appPlatform, osType, 
+    deviceStyle, eventId, eventDurationSecs, paramKeyValueMap
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.cuilihuan.applogs.visualize.bean.AppEventLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ext_event_logs
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.cuilihuan.applogs.visualize.bean.AppEventLogExample" >
+    delete from ext_event_logs
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.cuilihuan.applogs.visualize.bean.AppEventLog" >
+    insert into ext_event_logs (createdAtMs, appId, tenantId, 
+      deviceId, appVersion, appChannel, 
+      appPlatform, osType, deviceStyle, 
+      eventId, eventDurationSecs, paramKeyValueMap
+      )
+    values (#{createdAtMs,jdbcType=BIGINT}, #{appId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, 
+      #{deviceId,jdbcType=VARCHAR}, #{appVersion,jdbcType=VARCHAR}, #{appChannel,jdbcType=VARCHAR}, 
+      #{appPlatform,jdbcType=VARCHAR}, #{osType,jdbcType=VARCHAR}, #{deviceStyle,jdbcType=VARCHAR}, 
+      #{eventId,jdbcType=VARCHAR}, #{eventDurationSecs,jdbcType=VARCHAR}, #{paramKeyValueMap,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cuilihuan.applogs.visualize.bean.AppEventLog" >
+    insert into ext_event_logs
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createdAtMs != null" >
+        createdAtMs,
+      </if>
+      <if test="appId != null" >
+        appId,
+      </if>
+      <if test="tenantId != null" >
+        tenantId,
+      </if>
+      <if test="deviceId != null" >
+        deviceId,
+      </if>
+      <if test="appVersion != null" >
+        appVersion,
+      </if>
+      <if test="appChannel != null" >
+        appChannel,
+      </if>
+      <if test="appPlatform != null" >
+        appPlatform,
+      </if>
+      <if test="osType != null" >
+        osType,
+      </if>
+      <if test="deviceStyle != null" >
+        deviceStyle,
+      </if>
+      <if test="eventId != null" >
+        eventId,
+      </if>
+      <if test="eventDurationSecs != null" >
+        eventDurationSecs,
+      </if>
+      <if test="paramKeyValueMap != null" >
+        paramKeyValueMap,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createdAtMs != null" >
+        #{createdAtMs,jdbcType=BIGINT},
+      </if>
+      <if test="appId != null" >
+        #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null" >
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null" >
+        #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="appVersion != null" >
+        #{appVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="appChannel != null" >
+        #{appChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="appPlatform != null" >
+        #{appPlatform,jdbcType=VARCHAR},
+      </if>
+      <if test="osType != null" >
+        #{osType,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceStyle != null" >
+        #{deviceStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="eventId != null" >
+        #{eventId,jdbcType=VARCHAR},
+      </if>
+      <if test="eventDurationSecs != null" >
+        #{eventDurationSecs,jdbcType=VARCHAR},
+      </if>
+      <if test="paramKeyValueMap != null" >
+        #{paramKeyValueMap,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.cuilihuan.applogs.visualize.bean.AppEventLogExample" resultType="java.lang.Integer" >
+    select count(*) from ext_event_logs
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update ext_event_logs
+    <set >
+      <if test="record.createdAtMs != null" >
+        createdAtMs = #{record.createdAtMs,jdbcType=BIGINT},
+      </if>
+      <if test="record.appId != null" >
+        appId = #{record.appId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null" >
+        tenantId = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceId != null" >
+        deviceId = #{record.deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appVersion != null" >
+        appVersion = #{record.appVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appChannel != null" >
+        appChannel = #{record.appChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appPlatform != null" >
+        appPlatform = #{record.appPlatform,jdbcType=VARCHAR},
+      </if>
+      <if test="record.osType != null" >
+        osType = #{record.osType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceStyle != null" >
+        deviceStyle = #{record.deviceStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.eventId != null" >
+        eventId = #{record.eventId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.eventDurationSecs != null" >
+        eventDurationSecs = #{record.eventDurationSecs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paramKeyValueMap != null" >
+        paramKeyValueMap = #{record.paramKeyValueMap,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update ext_event_logs
+    set createdAtMs = #{record.createdAtMs,jdbcType=BIGINT},
+      appId = #{record.appId,jdbcType=VARCHAR},
+      tenantId = #{record.tenantId,jdbcType=VARCHAR},
+      deviceId = #{record.deviceId,jdbcType=VARCHAR},
+      appVersion = #{record.appVersion,jdbcType=VARCHAR},
+      appChannel = #{record.appChannel,jdbcType=VARCHAR},
+      appPlatform = #{record.appPlatform,jdbcType=VARCHAR},
+      osType = #{record.osType,jdbcType=VARCHAR},
+      deviceStyle = #{record.deviceStyle,jdbcType=VARCHAR},
+      eventId = #{record.eventId,jdbcType=VARCHAR},
+      eventDurationSecs = #{record.eventDurationSecs,jdbcType=VARCHAR},
+      paramKeyValueMap = #{record.paramKeyValueMap,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

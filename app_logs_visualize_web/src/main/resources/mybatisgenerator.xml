@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+
+
+
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/applogsdb"
+                        userId="root"
+                        password="root">
+        </jdbcConnection>
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <!--指定javabean生成的位置-->
+        <javaModelGenerator targetPackage="com.cuilihuan.applogs.visualize.bean" targetProject="G:\IdeaProjects\app_statistics_project\app_logs_visualize_web\src\main\java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <!--指定sql映射文件成的位置-->
+        <sqlMapGenerator targetPackage="mapper"  targetProject="G:\IdeaProjects\app_statistics_project\app_logs_visualize_web\src\main\resources">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <!--指定dao接口生成的位置-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.cuilihuan.applogs.visualize.dao"  targetProject="G:\IdeaProjects\app_statistics_project\app_logs_visualize_web\src\main\java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <!--table指定每个表以及生成策略-->
+        <table tableName="ext_error_logs" domainObjectName="AppErrorLog" >
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="ext_event_logs" domainObjectName="AppEventLog">
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="ext_page_logs" domainObjectName="AppPageLog">
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="ext_startup_logs" domainObjectName="AppStartupLog">
+            <property name="useActualColumnNames" value="true" />
+        </table>
+        <table tableName="ext_usage_logs" domainObjectName="AppUsageLog">
+            <property name="useActualColumnNames" value="true" />
+        </table>
+
+    </context>
+</generatorConfiguration>

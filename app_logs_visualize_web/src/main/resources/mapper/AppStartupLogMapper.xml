@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cuilihuan.applogs.visualize.dao.AppStartupLogMapper" >
+  <resultMap id="BaseResultMap" type="com.cuilihuan.applogs.visualize.bean.AppStartupLog" >
+    <result column="createdAtMs" property="createdAtMs" jdbcType="BIGINT" />
+    <result column="appId" property="appId" jdbcType="VARCHAR" />
+    <result column="tenantId" property="tenantId" jdbcType="VARCHAR" />
+    <result column="deviceId" property="deviceId" jdbcType="VARCHAR" />
+    <result column="appVersion" property="appVersion" jdbcType="VARCHAR" />
+    <result column="appChannel" property="appChannel" jdbcType="VARCHAR" />
+    <result column="appPlatform" property="appPlatform" jdbcType="VARCHAR" />
+    <result column="osType" property="osType" jdbcType="VARCHAR" />
+    <result column="deviceStyle" property="deviceStyle" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="ipAddress" property="ipAddress" jdbcType="VARCHAR" />
+    <result column="network" property="network" jdbcType="VARCHAR" />
+    <result column="carrier" property="carrier" jdbcType="VARCHAR" />
+    <result column="brand" property="brand" jdbcType="VARCHAR" />
+    <result column="screenSize" property="screenSize" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    createdAtMs, appId, tenantId, deviceId, appVersion, appChannel, appPlatform, osType, 
+    deviceStyle, country, province, ipAddress, network, carrier, brand, screenSize
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.cuilihuan.applogs.visualize.bean.AppStartupLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ext_startup_logs
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.cuilihuan.applogs.visualize.bean.AppStartupLogExample" >
+    delete from ext_startup_logs
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.cuilihuan.applogs.visualize.bean.AppStartupLog" >
+    insert into ext_startup_logs (createdAtMs, appId, tenantId, 
+      deviceId, appVersion, appChannel, 
+      appPlatform, osType, deviceStyle, 
+      country, province, ipAddress, 
+      network, carrier, brand, 
+      screenSize)
+    values (#{createdAtMs,jdbcType=BIGINT}, #{appId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, 
+      #{deviceId,jdbcType=VARCHAR}, #{appVersion,jdbcType=VARCHAR}, #{appChannel,jdbcType=VARCHAR}, 
+      #{appPlatform,jdbcType=VARCHAR}, #{osType,jdbcType=VARCHAR}, #{deviceStyle,jdbcType=VARCHAR}, 
+      #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{ipAddress,jdbcType=VARCHAR}, 
+      #{network,jdbcType=VARCHAR}, #{carrier,jdbcType=VARCHAR}, #{brand,jdbcType=VARCHAR}, 
+      #{screenSize,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cuilihuan.applogs.visualize.bean.AppStartupLog" >
+    insert into ext_startup_logs
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createdAtMs != null" >
+        createdAtMs,
+      </if>
+      <if test="appId != null" >
+        appId,
+      </if>
+      <if test="tenantId != null" >
+        tenantId,
+      </if>
+      <if test="deviceId != null" >
+        deviceId,
+      </if>
+      <if test="appVersion != null" >
+        appVersion,
+      </if>
+      <if test="appChannel != null" >
+        appChannel,
+      </if>
+      <if test="appPlatform != null" >
+        appPlatform,
+      </if>
+      <if test="osType != null" >
+        osType,
+      </if>
+      <if test="deviceStyle != null" >
+        deviceStyle,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="ipAddress != null" >
+        ipAddress,
+      </if>
+      <if test="network != null" >
+        network,
+      </if>
+      <if test="carrier != null" >
+        carrier,
+      </if>
+      <if test="brand != null" >
+        brand,
+      </if>
+      <if test="screenSize != null" >
+        screenSize,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createdAtMs != null" >
+        #{createdAtMs,jdbcType=BIGINT},
+      </if>
+      <if test="appId != null" >
+        #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null" >
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null" >
+        #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="appVersion != null" >
+        #{appVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="appChannel != null" >
+        #{appChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="appPlatform != null" >
+        #{appPlatform,jdbcType=VARCHAR},
+      </if>
+      <if test="osType != null" >
+        #{osType,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceStyle != null" >
+        #{deviceStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="ipAddress != null" >
+        #{ipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="network != null" >
+        #{network,jdbcType=VARCHAR},
+      </if>
+      <if test="carrier != null" >
+        #{carrier,jdbcType=VARCHAR},
+      </if>
+      <if test="brand != null" >
+        #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="screenSize != null" >
+        #{screenSize,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.cuilihuan.applogs.visualize.bean.AppStartupLogExample" resultType="java.lang.Integer" >
+    select count(*) from ext_startup_logs
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update ext_startup_logs
+    <set >
+      <if test="record.createdAtMs != null" >
+        createdAtMs = #{record.createdAtMs,jdbcType=BIGINT},
+      </if>
+      <if test="record.appId != null" >
+        appId = #{record.appId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null" >
+        tenantId = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceId != null" >
+        deviceId = #{record.deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appVersion != null" >
+        appVersion = #{record.appVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appChannel != null" >
+        appChannel = #{record.appChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appPlatform != null" >
+        appPlatform = #{record.appPlatform,jdbcType=VARCHAR},
+      </if>
+      <if test="record.osType != null" >
+        osType = #{record.osType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceStyle != null" >
+        deviceStyle = #{record.deviceStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.country != null" >
+        country = #{record.country,jdbcType=VARCHAR},
+      </if>
+      <if test="record.province != null" >
+        province = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ipAddress != null" >
+        ipAddress = #{record.ipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.network != null" >
+        network = #{record.network,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carrier != null" >
+        carrier = #{record.carrier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brand != null" >
+        brand = #{record.brand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.screenSize != null" >
+        screenSize = #{record.screenSize,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update ext_startup_logs
+    set createdAtMs = #{record.createdAtMs,jdbcType=BIGINT},
+      appId = #{record.appId,jdbcType=VARCHAR},
+      tenantId = #{record.tenantId,jdbcType=VARCHAR},
+      deviceId = #{record.deviceId,jdbcType=VARCHAR},
+      appVersion = #{record.appVersion,jdbcType=VARCHAR},
+      appChannel = #{record.appChannel,jdbcType=VARCHAR},
+      appPlatform = #{record.appPlatform,jdbcType=VARCHAR},
+      osType = #{record.osType,jdbcType=VARCHAR},
+      deviceStyle = #{record.deviceStyle,jdbcType=VARCHAR},
+      country = #{record.country,jdbcType=VARCHAR},
+      province = #{record.province,jdbcType=VARCHAR},
+      ipAddress = #{record.ipAddress,jdbcType=VARCHAR},
+      network = #{record.network,jdbcType=VARCHAR},
+      carrier = #{record.carrier,jdbcType=VARCHAR},
+      brand = #{record.brand,jdbcType=VARCHAR},
+      screenSize = #{record.screenSize,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

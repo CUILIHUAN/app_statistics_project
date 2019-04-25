@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="app_logs_visualize_web:war">
+    <output-path>$PROJECT_DIR$/app_logs_visualize_web/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>app_logs_visualize_web</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="app_logs_visualize_web-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="app_logs_visualize_web:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- 扫描service包 -->
+    <context:component-scan base-package="com.cuilihuan.applogs.visualize">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+
+    <!-- 连接hive数据源 -->
+    <!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">-->
+        <!--<property name="driverClass" value="org.apache.hive.jdbc.HiveDriver" />-->
+        <!--<property name="jdbcUrl" value="jdbc:hive2://hadoop03:10000/applogsdb" />-->
+        <!--<property name="user" value="root" />-->
+        <!--<property name="password" value="root" />-->
+    <!--</bean>-->
+
+    <context:property-placeholder location="classpath:dbconfig.properties"/>
+
+    <bean id="comboPooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="jdbcUrl" value="${jdbc.jdbcUrl}"/>
+        <property name="driverClass" value="${jdbc.driverClass}"/>
+        <property name="user" value="${jdbc.user}" />
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!--<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">-->
+        <!--<property name="dataSource" ref="dataSource" />-->
+        <!--<property name="configLocation" value="classpath:mybatis-config.xml" />-->
+    <!--</bean>-->
+
+    <!--配置和MyBatis的整合-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactoryBean">
+        <!--MyBatis全局配置的文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <property name="dataSource" ref="comboPooledDataSource"/>
+
+        <!--指定mybatis,mapper文件的位置-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+    </bean>
+
+    <!--配置扫描器：将Mybatis接口的实现加入到Ioc容器中-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--扫描所有dao接口的实现，加入到ioc容器中-->
+        <property name="basePackage" value="com.cuilihuan.applogs.visualize.dao"/>
+    </bean>
+
+
+
+
+
+
+</beans>
