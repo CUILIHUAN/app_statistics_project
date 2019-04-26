@@ -223,6 +223,9 @@
         <element id="directory" name="js">
           <element id="dir-copy" path="$PROJECT_DIR$/app_logs_visualize_web/src/main/webapp/js" />
         </element>
+        <element id="directory" name="css">
+          <element id="dir-copy" path="$PROJECT_DIR$/app_logs_visualize_web/src/main/webapp/css" />
+        </element>
       </element>
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/app_logs_visualize_web/target/app_logs_visualize_web-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
