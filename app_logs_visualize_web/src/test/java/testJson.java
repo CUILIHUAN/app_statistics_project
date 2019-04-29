@@ -1,7 +1,10 @@
 import com.cuilihuan.applogs.visualize.domain.JsonBean;
+import com.cuilihuan.applogs.visualize.util.DayFormat;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.junit.Test;
+
+import java.util.List;
 
 /**
  * @Auther:Cui LiHuan
@@ -19,6 +22,15 @@ public class testJson {
     @Test
     public void testTime() {
         System.out.println(System.currentTimeMillis());
+    }
+
+    @Test
+    public void analyTIme() {
+        String time = "2019/04/24 - 2019/05/22".replaceAll("-","/");
+        String startTime = time.split(" / ")[0];
+        String endTime = time.split(" / ")[1];
+        List<String> perDay = DayFormat.getPerDay(startTime, endTime);
+        System.out.println(perDay);
     }
 }
 

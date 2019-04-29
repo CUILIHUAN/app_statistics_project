@@ -2,13 +2,11 @@ package com.cuilihuan.applogs.visualize.dao;
 
 import com.cuilihuan.applogs.visualize.domain.InfoPorovinceAndNumBean;
 import com.cuilihuan.applogs.visualize.domain.StatBean;
-import org.springframework.stereotype.Component;
+import org.apache.ibatis.annotations.Param;import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-/**
- * Created by atguigu on 2017/11/9
- */
+
 
 public interface StatMapper {
     public StatBean findNewUsers();
@@ -23,6 +21,16 @@ public interface StatMapper {
 
     void updateProvince(String province,Integer id);
 
+
     List<InfoPorovinceAndNumBean> selectProvinceNum();
 
+    List<String> selectDayOfNewUsers(@Param("appId")String appId, @Param("version")String version, @Param("time")String time);
+
+    Integer selectPerDaysOfUsage(@Param("time") String time, @Param("appId") String appId, @Param("version") String version, @Param("dayNum") int dayNum, @Param("deviceIds")List<String> deviceIds);
+
+    Integer selectDayOfNewUsersAllVersion(@Param("time")String time, @Param("appId")String appId);
+
+    Integer selectDayOfNewUsersAllUsers(@Param("time") String time, @Param("appId")String appId);
+
+    Integer selectDayOfActiveUsers(@Param("time")String time, @Param("appId")String appId);
 }

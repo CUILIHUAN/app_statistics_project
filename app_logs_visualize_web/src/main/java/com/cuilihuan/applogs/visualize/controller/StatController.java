@@ -1,6 +1,7 @@
 package com.cuilihuan.applogs.visualize.controller;
 
 import com.cuilihuan.applogs.visualize.domain.JsonBean;
+import com.cuilihuan.applogs.visualize.domain.RetentionAnalaysisBean;
 import com.cuilihuan.applogs.visualize.domain.StatBean;
 import com.cuilihuan.applogs.visualize.service.StatService;
 import com.cuilihuan.applogs.visualize.util.DayFormat;
@@ -38,6 +39,29 @@ public class StatController {
     public StatBean findNewUsers() {
         StatBean bean = ss.findNewUsers();
         return bean;
+    }
+
+    /**
+     * 查看每日的活跃率
+     * @param appId 应用标识符
+     * @return 返回string类型的字符串
+     */
+    @RequestMapping("/activerateofday")
+    @ResponseBody
+    public String findActiveRateOfDay(String appId) {
+        return ss.findUserActiveRate(appId);
+    }
+
+
+    /**
+     * 统计每天的活跃度
+     * @param appId 应用标识符
+     * @return 返回string类型的数据
+     */
+    @RequestMapping("/userfreshness")
+    @ResponseBody
+    public String findUserFreshness(String appId) {
+        return ss.findUserFreshness(appId);
     }
 
     /**
@@ -91,6 +115,11 @@ public class StatController {
         return map;
     }
 
+    /**
+     * 查看启动人数
+     * @param appId 应用标识
+     * @return 返回Json数据
+     */
     @RequestMapping("/numofstartup")
     @ResponseBody
     public Map<String, Object> numOfStartup(String appId) {
@@ -99,11 +128,29 @@ public class StatController {
     }
 
 
+    /**
+     * 获得每省的使用人数
+     * @return 返回json数据格式
+     */
     @RequestMapping("/provinceofnum")
     @ResponseBody
     public Map<String,Object> provinceOfNum() {
         Map<String, Object> map = ss.findProvinceNum();
         return map;
+    }
+
+    /**
+     * 查询在某一时间段内的留存用户
+     * @param timeframe 时间段
+     * @param appidselect 应用号
+     * @param versionselect 版本号
+     * @return 返回json数据格式
+     */
+    @RequestMapping("/retentionanalaysis")
+    @ResponseBody
+    public List<RetentionAnalaysisBean> retentionAnalaysis(String timeframe, String appidselect, String versionselect) {
+        System.out.println(timeframe + "　" + appidselect + " " + versionselect);
+        return ss.findRetentionAnalaysisBean(timeframe,appidselect,versionselect);
     }
 
 

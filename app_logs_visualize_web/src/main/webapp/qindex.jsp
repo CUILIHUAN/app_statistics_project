@@ -46,8 +46,8 @@
     <h2><span class="icon-shopping-cart"></span>留存分析</h2>
     <ul>
         <li><a href="retentionanalysis.jsp" target="right"><span class="icon-caret-right"></span>留存用户</a></li>
-        <li><a href="searchgoodsinfo.jsp" target="right"><span class="icon-caret-right"></span>用户新鲜度</a></li>
-        <li><a href="searchgoodsinfo.jsp" target="right"><span class="icon-caret-right"></span>用户活跃度</a></li>
+        <li><a href="test.jsp" target="right"><span class="icon-caret-right"></span>用户新鲜度</a></li>
+        <li><a href="activeuserrate.jsp" target="right"><span class="icon-caret-right"></span>用户活跃度</a></li>
     </ul>
 
 </div>

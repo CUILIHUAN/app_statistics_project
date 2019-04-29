@@ -1,5 +1,6 @@
 package com.cuilihuan.applogs.visualize.service;
 
+import com.cuilihuan.applogs.visualize.domain.RetentionAnalaysisBean;
 import com.cuilihuan.applogs.visualize.domain.StatBean;
 
 import java.util.List;
@@ -20,4 +21,10 @@ public interface StatService {
     Map<String, Object> findStartUpNum(String appId);
 
     Map<String, Object> findProvinceNum();
+
+    List<RetentionAnalaysisBean> findRetentionAnalaysisBean(String time, String appId, String versionId);
+
+    public String findUserFreshness(String appId);
+
+    String findUserActiveRate(String appId);
 }

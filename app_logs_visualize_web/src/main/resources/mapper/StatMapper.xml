@@ -11,7 +11,6 @@
     </update>
 
 
-
     <!-- 查询新增用户 -->
     <select id="findNewUsers" resultMap="rm_StatBean">
         select count(*) stcount
@@ -111,6 +110,103 @@
         FROM ext_startup_logs
         GROUP BY province
         order by count desc
+    </select>
+
+    <select id="selectDayOfNewUsers" resultType="string">
+        SELECT
+           distinct deviceId
+        FROM
+            (
+                SELECT
+                    deviceId
+                FROM
+                    ext_startup_logs
+                WHERE
+                    appId = #{appId}
+                  AND appVersion = #{version}
+                GROUP BY
+                    deviceid
+                HAVING
+                        FROM_UNIXTIME(
+                                min(createdatms) / 1000,
+                                "%Y/%m/%d"
+                            ) = #{time}
+            )t
+    </select>
+
+    <select id="selectPerDaysOfUsage" resultType="int">
+        SELECT
+        count(*)
+        FROM
+        (
+        SELECT
+        deviceId
+        FROM
+        ext_startup_logs
+        WHERE
+        appId = #{appId}
+        AND appVersion = #{version}
+        AND FROM_UNIXTIME(
+        createdatms / 1000,
+        "%Y/%m/%d"
+        ) = date_format(DATE_ADD(#{time} , INTERVAL #{dayNum,jdbcType=INTEGER} DAY),"%Y/%m/%d")
+        GROUP BY
+        deviceId
+        HAVING
+        <foreach collection="deviceIds" item="id" open="deviceId in (" close=") " separator=",">
+            #{id}
+        </foreach>
+        )t
+    </select>
+
+    <select id="selectDayOfNewUsersAllVersion" resultType="int">
+        SELECT COUNT(*) FROM(
+SELECT
+	deviceId
+FROM
+	ext_startup_logs
+WHERE
+	appId = #{appId}
+GROUP BY
+	deviceid
+HAVING
+	FROM_UNIXTIME(
+		min(createdatms) / 1000,
+		"%Y/%m/%d"
+	) = #{time})t
+
+    </select>
+
+    <select id="selectDayOfNewUsersAllUsers" resultType="int">
+        SELECT
+	count(DISTINCT deviceId)
+FROM
+	ext_startup_logs
+WHERE
+	appId = #{appId} AND FROM_UNIXTIME(
+		createdatms / 1000,
+		"%Y/%m/%d"
+	) = #{time}
+    </select>
+
+    <select id="selectDayOfActiveUsers" resultType="int">
+        SELECT count(*)
+FROM
+(SELECT
+	deviceId
+FROM
+	ext_startup_logs
+WHERE
+	appId = #{appId}
+AND FROM_UNIXTIME(
+	createdatms / 1000,
+	"%Y/%m/%d"
+) = #{time}
+GROUP BY
+	deviceId
+HAVING
+	COUNT(*) >= 2
+)t
     </select>
 
     <resultMap id="rm_provincenum" type="com.cuilihuan.applogs.visualize.domain.InfoPorovinceAndNumBean">

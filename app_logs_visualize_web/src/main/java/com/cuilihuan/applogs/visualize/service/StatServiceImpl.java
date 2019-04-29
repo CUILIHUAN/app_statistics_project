@@ -2,6 +2,7 @@ package com.cuilihuan.applogs.visualize.service;
 
 import com.cuilihuan.applogs.visualize.dao.StatMapper;
 import com.cuilihuan.applogs.visualize.domain.InfoPorovinceAndNumBean;
+import com.cuilihuan.applogs.visualize.domain.RetentionAnalaysisBean;
 import com.cuilihuan.applogs.visualize.domain.StatBean;
 import com.cuilihuan.applogs.visualize.util.DayFormat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by atguigu on 2017/11/9
- */
+
 @Service("statService")
 public class StatServiceImpl implements StatService {
     @Autowired
@@ -82,6 +81,7 @@ public class StatServiceImpl implements StatService {
 
     /**
      * 查找每天启动的次数
+     *
      * @param appId 应用标识符
      * @return 返回Map数据
      */
@@ -116,7 +116,72 @@ public class StatServiceImpl implements StatService {
     }
 
 
-    public Map<String,Object> findProvinceNum() {
+    /**
+     * 查找用户的新鲜度
+     *
+     * @param appId 应用标识符
+     * @return 返回string类型的数据
+     */
+    public String findUserFreshness(String appId) {
+        System.out.println("appId:" + appId);
+        String startTime = DayFormat.beforeMonth()[0];
+        String endTime = DayFormat.beforeMonth()[1];
+        List<String> perDay = DayFormat.getPerDay(startTime, endTime);
+        String allnum = ""; //通过拼接，变成Json数据格式的字符串
+        for (int i = 0; i < perDay.size(); i++) {
+            String[] nums = new String[2];
+            nums[0] = String.valueOf(DayFormat.dateToString(perDay.get(i)));
+            allnum += ",[" + nums[0];
+            int allUsers = statMapper.selectDayOfNewUsersAllUsers(perDay.get(i), appId); //查找总人数
+            int newUsers = statMapper.selectDayOfNewUsersAllVersion(perDay.get(i), appId); //查找每天的新增人数
+            if (allUsers != 0)
+                nums[1] = String.valueOf((float) newUsers / allUsers);
+            else
+                nums[1] = "0";
+            allnum += "," + nums[1] + "]";
+
+        }
+        allnum = allnum.substring(1);
+        allnum = "[" + allnum + "]";
+        System.out.println(allnum);
+        return allnum;
+    }
+
+    /**
+     * 查找日活跃率
+     * @param appId
+     * @return
+     */
+    @Override
+    public String findUserActiveRate(String appId) {
+        String startTime = DayFormat.beforeMonth()[0];
+        String endTime = DayFormat.beforeMonth()[1];
+        List<String> perDay = DayFormat.getPerDay(startTime, endTime);
+        String rate;
+        String activeUserRate = "";
+        for (int i = 0; i < perDay.size(); i++) {
+            activeUserRate += ",[" + DayFormat.dateToString(perDay.get(i));
+            int allUsers = statMapper.selectDayOfNewUsersAllUsers(perDay.get(i), appId); //查找总人数
+            int activeUsers = statMapper.selectDayOfActiveUsers(perDay.get(i), appId); //查找每天的新增人数
+            if (allUsers != 0)
+                rate = String.valueOf((float) activeUsers / allUsers);
+            else
+                rate = "0";
+            activeUserRate += "," + rate + "]";
+
+        }
+        activeUserRate = activeUserRate.substring(1);
+        activeUserRate = "[" + activeUserRate + "]";
+        System.out.println(activeUserRate);
+        return activeUserRate;
+    }
+
+    /**
+     * 查找每省的人数
+     *
+     * @return 返回JSON数据类型
+     */
+    public Map<String, Object> findProvinceNum() {
         List<InfoPorovinceAndNumBean> list = statMapper.selectProvinceNum();
         Map<String, Object> map = new HashMap<>();
         map.put("list", list);
@@ -129,9 +194,44 @@ public class StatServiceImpl implements StatService {
     }
 
     /**
+     * 查找留存用户
+     *
+     * @param time      时间段
+     * @param appId     应用标识符
+     * @param versionId 版本标识符
+     * @return 返回Json数据格式
+     */
+    @Override
+    public List<RetentionAnalaysisBean> findRetentionAnalaysisBean(String time, String appId, String versionId) {
+        List<RetentionAnalaysisBean> list = new ArrayList<>();
+        time = time.replaceAll("-", "/");
+        String startTime = time.split(" / ")[0];
+        String endTime = time.split(" / ")[1];
+        List<String> perDay = DayFormat.getPerDay(startTime, endTime);
+        int num[] = {1, 2, 3, 4, 5, 6, 7, 14, 30};
+
+        for (int i = 0; i < perDay.size(); i++) {
+            RetentionAnalaysisBean bean = new RetentionAnalaysisBean();
+            bean.setTime(perDay.get(i));
+            List<String> userNum = statMapper.selectDayOfNewUsers(appId, versionId, perDay.get(i));
+            bean.setAdduser(String.valueOf(userNum.size()));
+            for (int j = 0; j < num.length; j++) {
+                if (DayFormat.compare_date(perDay.get(i), DayFormat.getCurrentDay(), num[j]))
+                    bean.getDay()[j] = String.valueOf(statMapper.selectPerDaysOfUsage(perDay.get(i), appId, versionId, num[j], userNum));
+                else
+                    bean.getDay()[j] = "-";
+            }
+            bean.init();
+            list.add(bean);
+        }
+        return list;
+    }
+
+    /**
      * 根据版本、时间号来寻找对应的人数
-     * @param list 带有版本，时间号的人数集合
-     * @param version 版本号
+     *
+     * @param list       带有版本，时间号的人数集合
+     * @param version    版本号
      * @param dateString 时间
      * @return 返回人数
      */
@@ -146,7 +246,6 @@ public class StatServiceImpl implements StatService {
         }
         return "0";
     }
-
 
 
     /**
