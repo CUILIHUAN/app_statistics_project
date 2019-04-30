@@ -33,4 +33,13 @@ public interface StatMapper {
     Integer selectDayOfNewUsersAllUsers(@Param("time") String time, @Param("appId")String appId);
 
     Integer selectDayOfActiveUsers(@Param("time")String time, @Param("appId")String appId);
+
+    List<StatBean> selectDevicesOfNUM(@Param("appId")String appId);
+
+    List<StatBean> selectDevicesOfNUMByVersion(@Param("appId")String appId, @Param("deviceStyle")String deviceStyle);
+
+    List<StatBean> selectNetWorkByAppId(@Param("appId")String appId);
+
+
+    List<StatBean> selectUseTimes(@Param("appId")String appId, @Param("time")String time);
 }

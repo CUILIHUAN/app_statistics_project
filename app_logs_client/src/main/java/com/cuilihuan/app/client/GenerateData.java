@@ -22,7 +22,7 @@ public class GenerateData {
     private static String[] appChannels = {"youmeng1", "youmeng2"};//渠道,安装时就在清单中制定了，appStore等。
     private static String[] appPlatforms = {"android", "ios"};//平台
     private static String[] osTypes = {"8.3", "7.1.1"};//操作系统
-    private static String[] deviceStyles = {"iPhone 6", "iPhone 6 Plus", "红米手机1s"};//机型
+    private static String[] deviceStyles = {"iPhone 6", "iPhone 6 Plus", "红米手机1s","荣耀9","HUAWEI P30"};//机型
 
 
     // 1.1.1 初始化设备id
@@ -57,7 +57,7 @@ public class GenerateData {
     // 1.2 启动日志属性值
     private static String[] countrys = {"America", "china"};//国家，终端不用上报，服务器自动填充该属性
     private static String[] provinces = {"Washington", "jiangxi", "beijing"};//省份，终端不用上报，服务器自动填充该属性
-    private static String[] networks = {"WiFi", "CellNetwork"};//网络
+    private static String[] networks = {"WiFi", "CellNetwork","4G"};//网络
     private static String[] carriers = {"中国移动", "中国电信", "EE"};//运营商
     private static String[] brands = {"三星", "华为", "Apple", "魅族", "小米", "锤子"};//品牌
     private static String[] screenSizes = {"1136*640", "960*640", "480*320"};//分辨率

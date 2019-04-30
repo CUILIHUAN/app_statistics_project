@@ -4,19 +4,23 @@
     <file type="web" url="file://$PROJECT_DIR$/app_logs_collect_web" />
     <file type="web" url="file://$PROJECT_DIR$/app_logs_visualize_web" />
   </component>
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="ES6" />
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/app_log_common/pom.xml" />
+        <option value="$PROJECT_DIR$/app_logs_visualize_web/pom.xml" />
         <option value="$PROJECT_DIR$/app_logs_client/pom.xml" />
         <option value="$PROJECT_DIR$/app_logs_collect_web/pom.xml" />
         <option value="$PROJECT_DIR$/app_logs_flume/pom.xml" />
         <option value="$PROJECT_DIR$/app_logs_hive/pom.xml" />
-        <option value="$PROJECT_DIR$/app_logs_visualize_web/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/out" />
+  <component name="ProjectResources">
+    <resource url="http://mybatis.org/dtd/mybatis-3-mapper.dtd" location="$PROJECT_DIR$" />
   </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="false" project-jdk-name="1.7" project-jdk-type="JavaSDK" />
 </project>

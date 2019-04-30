@@ -1,5 +1,6 @@
 package com.cuilihuan.applogs.visualize.service;
 
+import com.cuilihuan.applogs.visualize.domain.DeviceAnalysisBean;
 import com.cuilihuan.applogs.visualize.domain.RetentionAnalaysisBean;
 import com.cuilihuan.applogs.visualize.domain.StatBean;
 
@@ -27,4 +28,10 @@ public interface StatService {
     public String findUserFreshness(String appId);
 
     String findUserActiveRate(String appId);
+
+    List<DeviceAnalysisBean> findDeviceAnalysis(String appId);
+
+    Map<String, Object> findnetWorkNumsByAppId(String appId);
+
+    public Map<String, Object> findUsageTimes(String appId, String time);
 }

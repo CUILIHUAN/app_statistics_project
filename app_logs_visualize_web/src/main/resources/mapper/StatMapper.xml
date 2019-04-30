@@ -209,6 +209,72 @@ HAVING
 )t
     </select>
 
+    <select id="selectDevicesOfNUM" resultMap="rm_devicesnum">
+        SELECT COUNT(*) num,deviceStyle
+from(
+SELECT deviceStyle
+FROM ext_startup_logs
+where appId = #{appId}
+GROUP BY deviceId
+)t
+GROUP BY deviceStyle
+ORDER BY num desc
+LIMIT 6;
+    </select>
+
+    <select id="selectNetWorkByAppId" resultMap="rm_network">
+        SELECT count(*) num,network,appVersion
+from(
+SELECT DISTINCT deviceId,network,appVersion
+FROM ext_startup_logs
+where appId = #{appId}
+)t
+GROUP BY network,appVersion
+    </select>
+
+
+    <select id="selectDevicesOfNUMByVersion" resultMap="rm_deviceversion">
+        SELECT COUNT(*) num,appVersion
+        FROM(
+        select appVersion
+        from ext_startup_logs
+        WHERE appId = #{appId} and deviceStyle = #{deviceStyle}
+        GROUP BY deviceId
+        )t
+        GROUP BY appVersion;
+
+    </select>
+
+    <select id="selectUseTimes" resultMap="rm_usetimes">
+SELECT singleUseDurationSecs num,appVersion
+FROM ext_usage_logs
+where appId = #{appId} and FROM_UNIXTIME(
+	createdatms / 1000,
+	"%Y/%m/%d") = #{time}
+    </select>
+
+    <resultMap id="rm_usetimes" type="com.cuilihuan.applogs.visualize.domain.StatBean">
+        <result column="num" property="count"/>
+        <result column="appVersion" property="appVersion"/>
+    </resultMap>
+
+    <resultMap id="rm_network" type="com.cuilihuan.applogs.visualize.domain.StatBean">
+        <result column="num" property="count"/>
+        <result column="network" property="netWork"/>
+        <result column="appVersion" property="appVersion"/>
+    </resultMap>
+
+    <resultMap id="rm_deviceversion" type="com.cuilihuan.applogs.visualize.domain.StatBean">
+        <result column="num" property="count"/>
+        <result column="appVersion" property="appVersion"/>
+    </resultMap>
+
+
+    <resultMap id="rm_devicesnum" type="com.cuilihuan.applogs.visualize.domain.StatBean">
+        <result column="num" property="count"/>
+        <result column="deviceStyle" property="deviceName"/>
+    </resultMap>
+
     <resultMap id="rm_provincenum" type="com.cuilihuan.applogs.visualize.domain.InfoPorovinceAndNumBean">
         <result column="count" property="count"/>
         <result column="province" property="province"/>

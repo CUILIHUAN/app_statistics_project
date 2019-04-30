@@ -18,7 +18,7 @@
       <module name="app_log_common" target="1.7" />
       <module name="app_logs_client" target="1.5" />
       <module name="app_logs_collect_web" target="1.7" />
-      <module name="app_logs_flume" target="1.5" />
+      <module name="app_logs_flume" target="1.7" />
       <module name="app_logs_hive" target="1.5" />
       <module name="app_logs_visualize_web" target="1.7" />
     </bytecodeTargetLevel>

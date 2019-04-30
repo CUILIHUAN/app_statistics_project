@@ -1,17 +1,12 @@
 package com.cuilihuan.applogs.visualize.service;
 
 import com.cuilihuan.applogs.visualize.dao.StatMapper;
-import com.cuilihuan.applogs.visualize.domain.InfoPorovinceAndNumBean;
-import com.cuilihuan.applogs.visualize.domain.RetentionAnalaysisBean;
-import com.cuilihuan.applogs.visualize.domain.StatBean;
+import com.cuilihuan.applogs.visualize.domain.*;
 import com.cuilihuan.applogs.visualize.util.DayFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service("statService")
@@ -55,6 +50,52 @@ public class StatServiceImpl implements StatService {
         map.put("time", date);
         map.put("date", num);
         return map;
+    }
+
+
+    /**
+     * 对设备机型进行分析
+     *
+     * @param appId 应用标识符
+     * @return 返回Json数据
+     */
+    public List<DeviceAnalysisBean> findDeviceAnalysis(String appId) {
+        List<DeviceAnalysisBean> list = new ArrayList<>();
+        List<StatBean> devices = statMapper.selectDevicesOfNUM(appId);
+        int allSum = 0;
+        for (int i = 0; i < devices.size(); i++) {
+            DeviceAnalysisBean deviceAnalysisBean = new DeviceAnalysisBean();
+            deviceAnalysisBean.setName(devices.get(i).getDeviceName());
+            allSum += devices.get(i).getCount();
+            deviceAnalysisBean.setY((int) devices.get(i).getCount());
+            List<StatBean> devicesOfNUMByVersion = statMapper.selectDevicesOfNUMByVersion(appId, devices.get(i).getDeviceName());
+
+            int versionSum = 0;
+            Drilldrilldown down = new Drilldrilldown();
+            down.setName(devices.get(i).getDeviceName());
+            down.setId(devices.get(i).getDeviceName());
+            for (int j = 0; j < devicesOfNUMByVersion.size(); j++) {
+                List<Object> data = new ArrayList<>();
+                data.add(devicesOfNUMByVersion.get(j).getAppVersion());
+                data.add(devicesOfNUMByVersion.get(j).getCount());
+                versionSum += devicesOfNUMByVersion.get(j).getCount();
+                down.getData().add(data);
+            }
+            for (int j = 0; j < down.getData().size(); j++) {
+                long num = (long) down.getData().get(j).remove(1);
+                down.getData().get(j).add((float) num / versionSum * 100);
+            }
+
+            deviceAnalysisBean.setDrilldrilldown(down);
+            list.add(deviceAnalysisBean);
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            float num = list.get(i).getY();
+            list.get(i).setY(num / allSum * 100);
+        }
+        return list;
+
     }
 
 
@@ -149,6 +190,7 @@ public class StatServiceImpl implements StatService {
 
     /**
      * 查找日活跃率
+     *
      * @param appId
      * @return
      */
@@ -226,6 +268,114 @@ public class StatServiceImpl implements StatService {
         }
         return list;
     }
+
+    /**
+     * 通过应用标识来查找网络终端对就的类型
+     *
+     * @param appId 应用标识符
+     * @return 返回Json数据
+     */
+    public Map<String, Object> findnetWorkNumsByAppId(String appId) {
+        List<StatBean> list = statMapper.selectNetWorkByAppId(appId);
+        String[] versions = {"3.2.1", "3.2.2", "3.2.3"};
+        List<String> netWorkNames = getNetWorkNames(list);
+
+        List<Map<String, Object>> dataList = new ArrayList<>();
+        System.out.println("netWorkNames:" + netWorkNames);
+        for (int i = 0; i < versions.length; i++) {
+            Map<String, Object> map = new HashMap<>();
+            int[] netWorkOfnums = new int[netWorkNames.size()];
+            for (int j = 0; j < netWorkNames.size(); j++) {
+                netWorkOfnums[j] = getNetWorkNumsByVersionAndDeviceName(list, netWorkNames.get(j), versions[i]);
+            }
+            map.put("name", versions[i]);
+            map.put("data", netWorkOfnums);
+
+            dataList.add(map);
+        }
+
+        Map<String, Object> returnList = new HashMap<>();
+        returnList.put("categories", netWorkNames);
+        returnList.put("data", dataList);
+        return returnList;
+    }
+
+
+    public Map<String, Object> findUsageTimes(String appId, String time) {
+        time = time.replaceAll("-", "/");
+        List<StatBean> list = statMapper.selectUseTimes(appId, time);
+        String[] timePer = {"0-30s", "31-60s", "60-90s", "90-180s", "180以上"};
+        String[] appVersion = {"3.2.1", "3.2.2", "3.2.3"};
+        List<Object> dataList = new ArrayList<>();
+        for (int i = 0; i < appVersion.length; i++) {
+            Map<String, Object> map = new HashMap<>();
+            int[] data = new int[timePer.length];
+            for (int j = 0; j < list.size(); j++) {
+                if (list.get(j).getAppVersion().equals(appVersion[i])) {
+                    data[getNumByTrueTime((int) list.get(j).getCount())]++;
+                }
+            }
+            map.put("name", appVersion[i]);
+            map.put("data", data);
+            dataList.add(map);
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("categories", timePer);
+        map.put("data", dataList);
+        return map;
+    }
+
+
+    public int getNumByTrueTime(int num) {
+        if (num > 0 && num <= 30) {
+            return 0;
+        } else if (num >= 31 && num <= 60) {
+            return 1;
+        } else if (num >= 61 && num <= 90) {
+            return 2;
+        } else if (num >= 91 && num <= 180) {
+            return 3;
+        } else {
+            return 4;
+        }
+    }
+
+    /**
+     * 通过版本与设备名来获取对应网络人数
+     * @param list 要查询的List
+     * @param netWorkName 网络类型
+     * @param appVersion 手机标识符
+     * @return 返回Json数据类型
+     */
+    private int getNetWorkNumsByVersionAndDeviceName(List<StatBean> list, String netWorkName, String appVersion) {
+        for (int i = 0; i < list.size(); i++) {
+            if (netWorkName.equals(list.get(i).getNetWork()) && appVersion.equals(list.get(i).getAppVersion())) {
+                return (int) list.get(i).getCount();
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 获得所有的网络类型
+     * @param list 查询的集合
+     * @return 返回所有的网络名
+     */
+    public List<String> getNetWorkNames(List<StatBean> list) {
+        List<String> returnList = new ArrayList<>();
+        Set<String> set = new HashSet<>();
+        for (int i = 0; i < list.size(); i++) {
+            set.add(list.get(i).getNetWork());
+        }
+        Iterator<String> it = set.iterator();
+        while (it.hasNext()) {
+            String str = it.next();
+            returnList.add(str);
+        }
+        return returnList;
+
+    }
+
 
     /**
      * 根据版本、时间号来寻找对应的人数

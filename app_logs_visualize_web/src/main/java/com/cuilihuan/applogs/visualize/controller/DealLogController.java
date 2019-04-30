@@ -93,7 +93,7 @@ public class DealLogController {
         Random random = new Random();
         appStartupLog.setCountry(geoInfo.getCountry());
 
-        System.out.println("geoInfo.getProvince" + geoInfo.getProvince());
+
 //        if ("".equals(geoInfo.getProvince())) {
 
 //            appStartupLog.setProvince(geoInfo.getProvince());

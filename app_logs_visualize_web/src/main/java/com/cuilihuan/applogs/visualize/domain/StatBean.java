@@ -9,7 +9,19 @@ public class StatBean {
     //统计数量
     private long count ;
 
+    private String netWork;
+
+    private String deviceName;
+
     private String appVersion;
+
+    public String getNetWork() {
+        return netWork;
+    }
+
+    public void setNetWork(String netWork) {
+        this.netWork = netWork;
+    }
 
     public String getAppVersion() {
         return appVersion;
@@ -34,6 +46,14 @@ public class StatBean {
     public void setCount(long count) {
 
         this.count = count;
+    }
+
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
     }
 
     @Override

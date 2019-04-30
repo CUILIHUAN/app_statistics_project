@@ -1,5 +1,6 @@
 package com.cuilihuan.applogs.visualize.controller;
 
+import com.cuilihuan.applogs.visualize.domain.DeviceAnalysisBean;
 import com.cuilihuan.applogs.visualize.domain.JsonBean;
 import com.cuilihuan.applogs.visualize.domain.RetentionAnalaysisBean;
 import com.cuilihuan.applogs.visualize.domain.StatBean;
@@ -43,6 +44,7 @@ public class StatController {
 
     /**
      * 查看每日的活跃率
+     *
      * @param appId 应用标识符
      * @return 返回string类型的字符串
      */
@@ -55,6 +57,7 @@ public class StatController {
 
     /**
      * 统计每天的活跃度
+     *
      * @param appId 应用标识符
      * @return 返回string类型的数据
      */
@@ -92,6 +95,7 @@ public class StatController {
 
     /**
      * 获得每周的活跃人数
+     *
      * @param appId 要查找的APP的id号
      * @return 返回带有json数据的对象
      */
@@ -105,6 +109,7 @@ public class StatController {
 
     /**
      * 获得每个版本的沉默用户
+     *
      * @param appId 要查找的APP标识符
      * @return 返回JSON数据对象
      */
@@ -117,6 +122,7 @@ public class StatController {
 
     /**
      * 查看启动人数
+     *
      * @param appId 应用标识
      * @return 返回Json数据
      */
@@ -130,19 +136,21 @@ public class StatController {
 
     /**
      * 获得每省的使用人数
+     *
      * @return 返回json数据格式
      */
     @RequestMapping("/provinceofnum")
     @ResponseBody
-    public Map<String,Object> provinceOfNum() {
+    public Map<String, Object> provinceOfNum() {
         Map<String, Object> map = ss.findProvinceNum();
         return map;
     }
 
     /**
      * 查询在某一时间段内的留存用户
-     * @param timeframe 时间段
-     * @param appidselect 应用号
+     *
+     * @param timeframe     时间段
+     * @param appidselect   应用号
      * @param versionselect 版本号
      * @return 返回json数据格式
      */
@@ -150,10 +158,28 @@ public class StatController {
     @ResponseBody
     public List<RetentionAnalaysisBean> retentionAnalaysis(String timeframe, String appidselect, String versionselect) {
         System.out.println(timeframe + "　" + appidselect + " " + versionselect);
-        return ss.findRetentionAnalaysisBean(timeframe,appidselect,versionselect);
+        return ss.findRetentionAnalaysisBean(timeframe, appidselect, versionselect);
     }
 
 
+    @RequestMapping("/deviceanalysis")
+    @ResponseBody
+    public List<DeviceAnalysisBean> DeviceAnalysis(String appId) {
+        return ss.findDeviceAnalysis(appId);
+    }
+
+
+    @RequestMapping("/networknums")
+    @ResponseBody
+    public Map<String, Object> netWorkNums(String appId) {
+        return ss.findnetWorkNumsByAppId(appId);
+    }
+
+    @RequestMapping("/usagetimes")
+    @ResponseBody
+    public Map<String, Object> usageTimes(String appId, String time) {
+        return ss.findUsageTimes(appId, time);
+    }
 
     private String findDate(String s, String s1, List<StatBean> list) {
         for (int i = 0; i < list.size(); i++) {
