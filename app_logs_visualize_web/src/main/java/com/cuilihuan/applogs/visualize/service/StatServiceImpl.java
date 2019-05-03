@@ -269,6 +269,10 @@ public class StatServiceImpl implements StatService {
         return list;
     }
 
+
+
+
+
     /**
      * 通过应用标识来查找网络终端对就的类型
      *
@@ -301,6 +305,13 @@ public class StatServiceImpl implements StatService {
     }
 
 
+    /**
+     * 查询使用次数
+     *
+     * @param appId 应用标识
+     * @param time  时间
+     * @return 返回集合
+     */
     public Map<String, Object> findUsageTimes(String appId, String time) {
         time = time.replaceAll("-", "/");
         List<StatBean> list = statMapper.selectUseTimes(appId, time);
@@ -326,6 +337,149 @@ public class StatServiceImpl implements StatService {
     }
 
 
+    /**
+     * 查找使用率
+     * @param appId 应用标识符
+     * @param time 时间
+     * @return 返回Map集合对象
+     */
+    public Map<String, Object> findUsageRate(String appId, String time) {
+        time = time.replaceAll("-", "/");
+        int[] days = {1,7,30};
+
+        Map<String, Object> mapresult = new HashMap<>();
+        for (int k = 0; k < days.length; k++) {
+            List<StatBean> statBeans = statMapper.selectUsageRate(time, appId, days[k]);
+            String[] appVersion = {"3.2.1", "3.2.2", "3.2.3"};
+            String[] categories = {"1-3次", "3-6次", "6-9次", "9-12次", "12次以上"};
+
+            List<Object> dataList = new ArrayList<>();
+            for (int i = 0; i < appVersion.length; i++) {
+                Map<String, Object> map = new HashMap<>();
+                int[] data = new int[categories.length];
+                for (int j = 0; j < statBeans.size(); j++) {
+
+                    if (statBeans.get(j).getAppVersion().equals(appVersion[i])) {
+                        data[getPositionByNum(statBeans.get(j).getCount())]++;
+                    }
+                }
+                map.put("name", appVersion[i]);
+                map.put("data", data);
+                dataList.add(map);
+            }
+            Map<String, Object> dataMap = new HashMap<>();
+            dataMap.put("categories", categories);
+            dataMap.put("data", dataList);
+
+            mapresult.put("result" + k, dataMap);
+        }
+
+
+        return mapresult;
+    }
+
+    /**
+     * 查找错误页面信息内容
+     * @param time 要查询的时间
+     * @param appId 应用标识
+     * @return 返回集合
+     */
+    public List<ErrorBean> findErrorDetail(String time, String appId) {
+        time = time.replaceAll("-", "/");
+        String endTime = time.split(" / ")[1];
+        String startTime = time.split(" / ")[0];
+        System.out.println(time+"=="+appId);
+        return statMapper.selectErrorDetails(appId, startTime, endTime);
+    }
+
+
+    /**
+     * 查询实时统计数据
+     * @return 返回Map集合的对象
+     */
+    public Map<String, Object> findEachTimeInfo() {
+        Map<String, Object> resultMap = new HashMap<>();
+        String[] data = DayFormat.getBeforeByHourTime(1);
+        List<StatBean> statBeans = statMapper.selectEachTimePeriod();
+        List<StatBean> statBeans1 = statMapper.selectEachAddUsers();
+        int[] dateStartUp = {75, 125, 89, 46, 42, 98, 38, 89, 128, 256, 565, 425, 758, 125, 584, 458, 425, 356, 125, 254, 147, 369, 258, 12};
+        int[] dateAddUsers = {4, 5, 3, 4, 2, 4, 6, 7, 5, 6, 9, 15, 4, 3, 4, 5, 6, 9, 7, 12, 11, 5, 6, 4};
+        for (int i = 0; i < statBeans.size(); i++) {
+            int num = Integer.valueOf(statBeans.get(i).getDate());
+            if ( num < data.length) {
+                dateStartUp[num] += statBeans.get(i).getCount();
+            }
+        }
+
+        for (int i = 0; i < statBeans1.size(); i++) {
+            int num1 = Integer.valueOf(statBeans1.get(i).getDate());
+            if ( num1 < data.length) {
+                dateAddUsers[num1] = (int) (dateAddUsers[num1]+statBeans.get(i).getCount());
+            }
+        }
+
+        int allUsers = statMapper.selectAllUsers();
+        allUsers += 1000;
+
+        int allStartUp = statMapper.selectAllStartUps();
+        allStartUp += 1200;
+
+        int todayAddUsers = statMapper.selectAddUserToday(DayFormat.getCurrentDay());
+        todayAddUsers += 3;
+
+        int beforeOneDayAddUsers = statMapper.selectAddUserToday(DayFormat.getBeforeOneDay());
+        beforeOneDayAddUsers+=5;
+
+        int addUsersRate = (int) (((float) todayAddUsers / beforeOneDayAddUsers - 1)*100);
+
+        int todayOfStartUpNums = statMapper.selectStartUpCurrentTime(DayFormat.getCurrentDay());
+        todayOfStartUpNums+=123;
+
+        int beforeOndDayOfStartUpNums = statMapper.selectStartUpCurrentTime(DayFormat.getBeforeOneDay());
+        beforeOndDayOfStartUpNums+=100;
+        int addStartUpRate = (int) (((float) todayOfStartUpNums / beforeOndDayOfStartUpNums - 1)*100);
+
+        resultMap.put("data", data);
+        resultMap.put("dateStartUp", dateStartUp);
+        resultMap.put("dateAddUsers", dateAddUsers);
+        resultMap.put("allUsers", allUsers);
+        resultMap.put("allStartUp", allStartUp);
+
+        resultMap.put("todayAddUsers", todayAddUsers);
+        resultMap.put("addUsersRate", addUsersRate);
+
+        resultMap.put("todayOfStartUpNums", todayOfStartUpNums);
+        resultMap.put("addStartUpRate", addStartUpRate);
+        return resultMap;
+    }
+
+
+    /**
+     * 根据大小来确定范围
+     * @param count  数量
+     * @return 返回具体位置
+     */
+    private int getPositionByNum(long count) {
+        if (count >= 1 && count < 3) {
+            return 0;
+        } else if (count >= 3 && count < 6) {
+            return 1;
+        } else if (count >= 6 && count < 9) {
+            return 2;
+        } else if (count >= 9 && count < 12) {
+            return 3;
+        } else if (count >= 12) {
+            return 4;
+        }
+        return 0;
+    }
+
+    /**
+     * 通过人数来查询所有的范围
+     *
+     * @param num 人数
+     * @return 返回的位置
+     */
     public int getNumByTrueTime(int num) {
         if (num > 0 && num <= 30) {
             return 0;
@@ -342,9 +496,10 @@ public class StatServiceImpl implements StatService {
 
     /**
      * 通过版本与设备名来获取对应网络人数
-     * @param list 要查询的List
+     *
+     * @param list        要查询的List
      * @param netWorkName 网络类型
-     * @param appVersion 手机标识符
+     * @param appVersion  手机标识符
      * @return 返回Json数据类型
      */
     private int getNetWorkNumsByVersionAndDeviceName(List<StatBean> list, String netWorkName, String appVersion) {
@@ -358,6 +513,7 @@ public class StatServiceImpl implements StatService {
 
     /**
      * 获得所有的网络类型
+     *
      * @param list 查询的集合
      * @return 返回所有的网络名
      */

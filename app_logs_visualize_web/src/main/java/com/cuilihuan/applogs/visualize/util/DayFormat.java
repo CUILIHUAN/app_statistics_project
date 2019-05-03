@@ -15,13 +15,19 @@ import java.util.List;
  */
 public class DayFormat {
     public static void main(String[] args) throws ParseException {
-        Date date = new Date();
-        date.setTime(1425254400000L);
-        System.out.println(System.currentTimeMillis());
-        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-        System.out.println(df.parse("2019/04/21").getTime());
+//        Date date = new Date();
+//        date.setTime(1425254400000L);
+//        System.out.println(System.currentTimeMillis());
+//        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+//        System.out.println(df.parse("2019/04/21").getTime());
+//
+//        System.out.println(beforeMonth()[0]+"+"+beforeMonth()[1]);
 
-        System.out.println(beforeMonth()[0]+"+"+beforeMonth()[1]);
+        String[] beforeByHourTime = getBeforeByHourTime(1);
+        for (int i = 0; i < beforeByHourTime.length; i++) {
+            System.out.println(beforeByHourTime[i]);
+
+        }
 
     }
 
@@ -151,5 +157,32 @@ public class DayFormat {
         java.util.Calendar c = java.util.Calendar.getInstance();
         java.text.SimpleDateFormat f = new java.text.SimpleDateFormat("yyyy/MM/dd");
         return f.format(c.getTime());
+    }
+
+    public static String getBeforeOneDay() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.DATE, -1);
+        Date start = c.getTime();
+        return format.format(start);
+    }
+
+    /**
+     * 得到当前时间的前N小时
+     * 
+     *
+     */
+    public static String[] getBeforeByHourTime(int ihour){
+        String returnstr = "";
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - ihour);
+        SimpleDateFormat df = new SimpleDateFormat("HH");
+        returnstr = df.format(calendar.getTime());
+        String[] date = new String[Integer.valueOf(returnstr)];;
+        for (int i = 0; i < date.length; i++) {
+            date[i] = "" + (i+1);
+        }
+        return date;
     }
 }

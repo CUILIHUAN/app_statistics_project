@@ -1,9 +1,6 @@
 package com.cuilihuan.applogs.visualize.controller;
 
-import com.cuilihuan.applogs.visualize.domain.DeviceAnalysisBean;
-import com.cuilihuan.applogs.visualize.domain.JsonBean;
-import com.cuilihuan.applogs.visualize.domain.RetentionAnalaysisBean;
-import com.cuilihuan.applogs.visualize.domain.StatBean;
+import com.cuilihuan.applogs.visualize.domain.*;
 import com.cuilihuan.applogs.visualize.service.StatService;
 import com.cuilihuan.applogs.visualize.util.DayFormat;
 import org.springframework.stereotype.Controller;
@@ -162,6 +159,11 @@ public class StatController {
     }
 
 
+    /**
+     * 查询设备
+     * @param appId 应用标识符
+     * @return 返回List集合
+     */
     @RequestMapping("/deviceanalysis")
     @ResponseBody
     public List<DeviceAnalysisBean> DeviceAnalysis(String appId) {
@@ -169,18 +171,64 @@ public class StatController {
     }
 
 
+    /**
+     * 查询使用的网络
+     * @param appId 应用标识
+     * @return 返回Map集合
+     */
     @RequestMapping("/networknums")
     @ResponseBody
     public Map<String, Object> netWorkNums(String appId) {
         return ss.findnetWorkNumsByAppId(appId);
     }
 
+    /**
+     * 查询使用时间
+     * @param appId 应用标识
+     * @param time 时间
+     * @return 返回Map对象
+     */
     @RequestMapping("/usagetimes")
     @ResponseBody
     public Map<String, Object> usageTimes(String appId, String time) {
         return ss.findUsageTimes(appId, time);
     }
 
+
+    /**
+     * 查询使用率
+     * @param appId 应用标识
+     * @param time 时间
+     * @return 返回map对象
+     */
+    @RequestMapping("/usagerate")
+    @ResponseBody
+    public Map<String, Object> usageRate(String appId, String time) {
+        return ss.findUsageRate(appId, time);
+    }
+
+
+    /**
+     * 查询错误信息
+     * @param appId 应用标识
+     * @param time 时间
+     * @return 返回List集合
+     */
+    @RequestMapping("/errordetail")
+    @ResponseBody
+    public List<ErrorBean> errorDetail(String appId, String time) {
+        return ss.findErrorDetail(time, appId);
+    }
+
+    /**
+     * 查询实时统计信息
+     * @return
+     */
+    @RequestMapping("/eachtimeinfo")
+    @ResponseBody
+    public Map<String,Object> eachTimeInfo() {
+        return ss.findEachTimeInfo();
+    }
     private String findDate(String s, String s1, List<StatBean> list) {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getAppVersion().equals(s) && list.get(i).getDate().equals(s1)) {

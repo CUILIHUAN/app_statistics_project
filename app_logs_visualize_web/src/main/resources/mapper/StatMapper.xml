@@ -159,6 +159,7 @@
         )t
     </select>
 
+
     <select id="selectDayOfNewUsersAllVersion" resultType="int">
         SELECT COUNT(*) FROM(
 SELECT
@@ -252,6 +253,117 @@ where appId = #{appId} and FROM_UNIXTIME(
 	createdatms / 1000,
 	"%Y/%m/%d") = #{time}
     </select>
+
+    <select id="selectUsageRate" resultMap="rm_usagerate">
+
+        select count(FROM_UNIXTIME(createdatms / 1000,"%Y/%m/%d")) num ,appVersion
+        from ext_startup_logs
+        where FROM_UNIXTIME(createdatms / 1000,"%Y/%m/%d") >= date_format(DATE_SUB(#{time} , INTERVAL #{days} DAY), "%Y/%m/%d")
+        and FROM_UNIXTIME(createdatms / 1000,"%Y/%m/%d") &lt; date_format(DATE_ADD(#{time} , INTERVAL 1 DAY), "%Y/%m/%d")
+        and appId = #{appId}
+        GROUP BY deviceId,appVersion
+        ;
+
+    </select>
+
+    <select id="selectErrorDetails" resultType="com.cuilihuan.applogs.visualize.domain.ErrorBean">
+        SELECT from_unixtime(createdAtMs / 1000 ,"%Y/%m/%d %H:%i:%S") time,deviceId,deviceStyle,appPlatform,osType,errorBrief,errorDetail
+        FROM ext_error_logs
+        where appId = #{appId} and from_unixtime(createdAtMs / 1000 ,"%Y/%m/%d")>=#{startTime} and from_unixtime(createdAtMs / 1000 ,"%Y/%m/%d")
+        &lt;=#{endTime}
+    </select>
+    
+    <select id="selectEachTimePeriod" resultMap="rm_eachtimeperiod">
+        SELECT count(*) num,from_unixtime(createdAtMs / 1000 ,"%k") time
+        FROM ext_startup_logs
+        where from_unixtime(createdAtMs / 1000 ,"%Y/%m/%d")= date_format(now(),"%Y/%m/%d")
+        GROUP BY time
+    </select>
+
+    <select id="selectEachAddUsers" resultMap="rm_eachtimeperiod">
+        SELECT count(*) num,time
+        from
+            (
+                SELECT
+                    FROM_UNIXTIME(
+                            min(createdatms) / 1000,
+                            "%k"
+                        ) time
+                FROM
+                    ext_startup_logs
+                GROUP BY
+                    deviceid
+                HAVING
+                        FROM_UNIXTIME(
+                                min(createdatms) / 1000,
+                                "%Y/%m/%d"
+                            ) = date_format(now(), "%Y/%m/%d")
+            )t
+        GROUP BY time;
+    </select>
+
+    <select id="selectAllUsers" resultType="int">
+        SELECT
+            count(*)
+        FROM
+            (
+                SELECT
+                    deviceId
+                FROM
+                    ext_startup_logs
+                GROUP BY
+                    deviceId
+            ) t;
+    </select>
+
+    <select id="selectAllStartUps" resultType="int">
+        SELECT
+            count(*)
+        FROM
+            ext_startup_logs
+    </select>
+
+    <select id="selectAddUserToday" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            (
+                SELECT
+                    deviceId
+                FROM
+                    ext_startup_logs
+                GROUP BY
+                    deviceid
+                HAVING
+                        FROM_UNIXTIME(
+                                min(createdatms) / 1000,
+                                "%Y/%m/%d"
+                            ) = #{time}) t
+    </select>
+
+    <select id="selectStartUpCurrentTime" resultType="int">
+        SELECT
+            count(*)
+        FROM
+            ext_startup_logs
+        where
+                FROM_UNIXTIME(
+                        createdatms / 1000,
+                        "%Y/%m/%d"
+                    ) = #{time}
+    </select>
+
+    <resultMap id="rm_eachtimeperiod" type="com.cuilihuan.applogs.visualize.domain.StatBean">
+        <result column="num" property="count"/>
+        <result column="time" property="date"/>
+    </resultMap>
+
+
+    <resultMap id="rm_usagerate" type="com.cuilihuan.applogs.visualize.domain.StatBean">
+        <result column="num" property="count"/>
+        <result column="appVersion" property="appVersion"/>
+    </resultMap>
+
 
     <resultMap id="rm_usetimes" type="com.cuilihuan.applogs.visualize.domain.StatBean">
         <result column="num" property="count"/>
